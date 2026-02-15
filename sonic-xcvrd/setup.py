@@ -25,9 +25,15 @@ setup(
         'wheel'
     ],
     tests_require=[
+        'pytest-xdist',
         'pytest',
         'pytest-cov',
     ],
+    extras_require={
+        'testing': [
+            'pytest-xdist',
+        ],
+    },
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: No Input/Output (Daemon)',
