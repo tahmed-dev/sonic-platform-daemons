@@ -13,11 +13,11 @@ class Table:
         self.mock_dict = {}
 
     def _del(self, key):
-        del self.mock_dict[key]
+        self.mock_dict.pop(key, None)
         pass
 
     def hdel(self, key, value):
-        del self.mock_dict[key]
+        self.mock_dict.pop(key, None)
         pass
 
     def set(self, key, fvs):

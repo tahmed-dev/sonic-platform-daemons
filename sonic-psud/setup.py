@@ -21,11 +21,17 @@ setup(
         'wheel'
     ],
     tests_require=[
+        'pytest-xdist',
         'mock>=2.0.0; python_version < "3.3"',
         'pytest',
         'pytest-cov',
         'sonic_platform_common'
     ],
+    extras_require={
+        'testing': [
+            'pytest-xdist',
+        ],
+    },
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: No Input/Output (Daemon)',

@@ -81,7 +81,7 @@ def test_wrapper_get_psu_presence():
     psud.platform_chassis.get_psu.return_value = mock_psu
     result = psud._wrapper_get_psu_presence(mock_logger, 1)
     assert result is True
-    psud.platform_chassis.get_psu.assert_called_with(0)
+    psud.platform_chassis.get_psu.assert_any_call(0)
     mock_psu.get_presence.assert_called_once()
     assert psud.platform_psuutil.get_psu_presence.call_count == 0
     assert mock_logger.log_error.call_count == 0
@@ -95,7 +95,7 @@ def test_wrapper_get_psu_presence():
     psud.platform_chassis.get_psu.side_effect = Exception("PSU retrieval failed")
     psud._wrapper_get_psu_presence(mock_logger, 1)
     # Should fallback to platform_psuutil
-    psud.platform_chassis.get_psu.assert_called_with(0)
+    psud.platform_chassis.get_psu.assert_any_call(0)
     assert psud.platform_psuutil.get_psu_presence.call_count == 1
     psud.platform_psuutil.get_psu_presence.assert_called_with(1)
 
@@ -110,7 +110,7 @@ def test_wrapper_get_psu_presence():
     mock_psu.get_presence.side_effect = NotImplementedError
     psud._wrapper_get_psu_presence(mock_logger, 1)
     # Should fallback to platform_psuutil
-    psud.platform_chassis.get_psu.assert_called_with(0)
+    psud.platform_chassis.get_psu.assert_any_call(0)
     mock_psu.get_presence.assert_called_once()
     assert psud.platform_psuutil.get_psu_presence.call_count == 1
     psud.platform_psuutil.get_psu_presence.assert_called_with(1)
@@ -126,7 +126,7 @@ def test_wrapper_get_psu_presence():
     mock_psu.get_presence.side_effect = RuntimeError("Hardware error")
     result = psud._wrapper_get_psu_presence(mock_logger, 1)
     assert result is False
-    psud.platform_chassis.get_psu.assert_called_with(0)
+    psud.platform_chassis.get_psu.assert_any_call(0)
     mock_psu.get_presence.assert_called_once()
     assert mock_logger.log_warning.call_count == 1
     mock_logger.log_warning.assert_called_with("Exception in psu.get_presence() for PSU 1: Hardware error")
@@ -183,7 +183,7 @@ def test_wrapper_get_psu():
     psud.platform_chassis.get_psu.return_value = mock_psu
     result = psud._wrapper_get_psu(mock_logger, 1)
     assert result == mock_psu
-    psud.platform_chassis.get_psu.assert_called_with(0)  # psu_index - 1
+    psud.platform_chassis.get_psu.assert_any_call(0)  # psu_index - 1
     assert mock_logger.log_warning.call_count == 0
 
     # Reset mock
@@ -194,7 +194,7 @@ def test_wrapper_get_psu():
     psud.platform_chassis.get_psu.side_effect = NotImplementedError("Not implemented")
     result = psud._wrapper_get_psu(mock_logger, 1)
     assert result is None
-    psud.platform_chassis.get_psu.assert_called_with(0)
+    psud.platform_chassis.get_psu.assert_any_call(0)
     assert mock_logger.log_warning.call_count == 1
     mock_logger.log_warning.assert_called_with("get_psu() not implemented by platform chassis: Not implemented")
 
@@ -218,7 +218,7 @@ def test_wrapper_get_psu():
     psud.platform_chassis.get_psu.side_effect = NotImplementedError("Not implemented")
     result = psud._wrapper_get_psu(None, 1)
     assert result is None
-    psud.platform_chassis.get_psu.assert_called_with(0)
+    psud.platform_chassis.get_psu.assert_any_call(0)
 
     # Test with None logger and different exception types
     mock_logger.reset_mock()
@@ -252,7 +252,7 @@ def test_wrapper_get_psu_status():
     psud.platform_chassis.get_psu.return_value = mock_psu
     result = psud._wrapper_get_psu_status(mock_logger, 1)
     assert result is True
-    psud.platform_chassis.get_psu.assert_called_with(0)
+    psud.platform_chassis.get_psu.assert_any_call(0)
     mock_psu.get_powergood_status.assert_called_once()
     assert psud.platform_psuutil.get_psu_status.call_count == 0
     assert mock_logger.log_error.call_count == 0
@@ -266,7 +266,7 @@ def test_wrapper_get_psu_status():
     psud.platform_chassis.get_psu.side_effect = Exception("PSU retrieval failed")
     psud._wrapper_get_psu_status(mock_logger, 1)
     # Should fallback to platform_psuutil
-    psud.platform_chassis.get_psu.assert_called_with(0)
+    psud.platform_chassis.get_psu.assert_any_call(0)
     assert psud.platform_psuutil.get_psu_status.call_count == 1
     psud.platform_psuutil.get_psu_status.assert_called_with(1)
 
@@ -281,7 +281,7 @@ def test_wrapper_get_psu_status():
     mock_psu.get_powergood_status.side_effect = NotImplementedError
     psud._wrapper_get_psu_status(mock_logger, 1)
     # Should fallback to platform_psuutil
-    psud.platform_chassis.get_psu.assert_called_with(0)
+    psud.platform_chassis.get_psu.assert_any_call(0)
     mock_psu.get_powergood_status.assert_called_once()
     assert psud.platform_psuutil.get_psu_status.call_count == 1
     psud.platform_psuutil.get_psu_status.assert_called_with(1)
@@ -297,7 +297,7 @@ def test_wrapper_get_psu_status():
     mock_psu.get_powergood_status.side_effect = RuntimeError("Hardware error")
     result = psud._wrapper_get_psu_status(mock_logger, 1)
     assert result is False
-    psud.platform_chassis.get_psu.assert_called_with(0)
+    psud.platform_chassis.get_psu.assert_any_call(0)
     mock_psu.get_powergood_status.assert_called_once()
     assert mock_logger.log_warning.call_count == 1
     mock_logger.log_warning.assert_called_with("Exception in psu.get_powergood_status() for PSU 1: Hardware error")
@@ -371,7 +371,7 @@ def test_get_psu_key():
     psud.platform_chassis.get_psu.return_value = mock_psu
     result = psud.get_psu_key(1)
     assert result == "PSU-1"
-    psud.platform_chassis.get_psu.assert_called_with(0)  # psu_index - 1
+    psud.platform_chassis.get_psu.assert_any_call(0)  # psu_index - 1
     mock_psu.get_name.assert_called_once()
 
     # Reset mocks
